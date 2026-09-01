@@ -64,12 +64,12 @@ class VisitorService
         ];
     }
 
-    public static function getWeeklyStats(Shop $shop): array
+    public static function getWeeklyStats(Shop $shop): \Illuminate\Support\Collection
     {
         return DB::table('visitor_logs')
             ->where('shop_id', $shop->id)
             ->where('created_at', '>=', now()->subDays(7))
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as total'), DB::raw('COUNT(DISTINCT ip_hash) as unique_count'))
+            ->select(DB::raw("strftime('%Y-%m-%d', created_at) as date"), DB::raw('COUNT(*) as total'), DB::raw('COUNT(DISTINCT ip_hash) as unique_count'))
             ->groupBy('date')
             ->orderBy('date')
             ->get();
