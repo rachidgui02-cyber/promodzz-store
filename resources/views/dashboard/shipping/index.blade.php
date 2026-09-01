@@ -3,10 +3,10 @@
 @section('content')
 <div class="space-y-6" dir="rtl" x-data="{ showCompanyModal: false }">
     <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-extrabold text-white">الشحن</h1>
+        <h1 class="text-2xl font-extrabold" style="color:var(--text-primary)">الشحن</h1>
         <form action="{{ route('dashboard.orders.sync') }}" method="POST" x-data="{ syncing: false }" @submit="syncing = true">
             @csrf
-            <button type="submit" :disabled="syncing" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed" style="background:linear-gradient(135deg,#34d399,#2dd4bf)">
+            <button type="submit" :disabled="syncing" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed" style="color:var(--text-primary);background:linear-gradient(135deg,#34d399,#2dd4bf)">
                 <svg x-show="syncing" class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
                 <svg x-show="!syncing" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 <span x-show="!syncing">مزامنة الطلبات</span>
@@ -27,9 +27,9 @@
     @endif
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         @foreach($companies ?? [] as $company)
-            <div class="surface-card rounded-2xl border p-5 transition-colors" style="border-color:#232530">
+            <div class="stat-card rounded-2xl border p-5 transition-colors" style="border-color:var(--border)">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-white">{{ $company->name }}</h3>
+                    <h3 class="font-bold" style="color:var(--text-primary)">{{ $company->name }}</h3>
                     <form action="{{ route('dashboard.shipping.toggle', $company->id) }}" method="POST">@csrf @method('PATCH')
                         <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors" style="background:{{ $company->is_active ? '#34d399' : '#33353f' }}">
                             <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform {{ $company->is_active ? 'translate-x-1' : 'translate-x-6' }}"/>
@@ -37,30 +37,30 @@
                     </form>
                 </div>
                 <div class="space-y-2">
-                    <div class="flex justify-between text-sm"><span style="color:#8a92a6">التكلفة الأساسية</span><span class="text-white">{{ number_format($company->base_cost, 2) }} DA</span></div>
-                    <div class="flex justify-between text-sm"><span style="color:#8a92a6">التكلفة/منتج</span><span class="text-white">{{ number_format($company->per_item_cost, 2) }} DA</span></div>
-                    <div class="flex justify-between text-sm"><span style="color:#8a92a6">أيام التوصيل</span><span class="text-white">{{ $company->estimated_days }} أيام</span></div>
+                    <div class="flex justify-between text-sm"><span style="color:var(--text-secondary)">التكلفة الأساسية</span><span style="color:var(--text-primary)">{{ number_format($company->base_cost, 2) }} DA</span></div>
+                    <div class="flex justify-between text-sm"><span style="color:var(--text-secondary)">التكلفة/منتج</span><span style="color:var(--text-primary)">{{ number_format($company->per_item_cost, 2) }} DA</span></div>
+                    <div class="flex justify-between text-sm"><span style="color:var(--text-secondary)">أيام التوصيل</span><span style="color:var(--text-primary)">{{ $company->estimated_days }} أيام</span></div>
                 </div>
-                <div class="mt-4 pt-3 border-t" style="border-color:#232530">
+                <div class="mt-4 pt-3 border-t" style="border-color:var(--border)">
                     @if($company->is_active)<span class="text-xs font-medium" style="color:#34d399">نشط</span>@else<span class="text-xs font-medium" style="color:#6b7280">غير نشط</span>@endif
                 </div>
             </div>
         @endforeach
-        <div class="surface-card rounded-2xl border border-dashed p-5 flex flex-col items-center justify-center cursor-pointer transition-colors hover:border-accent-blue/30" style="border-color:#232530" @click="showCompanyModal = true">
-            <svg class="w-8 h-8 mb-2" style="color:#555a6e" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            <span class="text-sm" style="color:#8a92a6">إضافة شركة شحن</span>
+        <div class="stat-card rounded-2xl border border-dashed p-5 flex flex-col items-center justify-center cursor-pointer transition-colors hover:border-accent-blue/30" style="border-color:var(--border)" @click="showCompanyModal = true">
+            <svg class="w-8 h-8 mb-2" style="color:var(--text-tertiary)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span class="text-sm" style="color:var(--text-secondary)">إضافة شركة شحن</span>
         </div>
     </div>
-    <div class="surface-card rounded-2xl border overflow-hidden" style="border-color:#232530">
-        <div class="px-5 py-4 border-b flex items-center justify-between" style="border-color:#232530">
+    <div class="stat-card rounded-2xl border overflow-hidden" style="border-color:var(--border)">
+        <div class="px-5 py-4 border-b flex items-center justify-between" style="border-color:var(--border)">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(251,191,36,0.12)"><svg class="w-4 h-4" style="color:#fbbf24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-                <div><h2 class="text-sm font-bold text-white">طلبات بانتظار الإرسال</h2><p class="text-xs" style="color:#8a92a6">{{ ($pendingShipments ?? collect())->count() }} طلب بانتظار الشحن</p></div>
+                <div><h2 class="text-sm font-bold" style="color:var(--text-primary)">طلبات بانتظار الإرسال</h2><p class="text-xs" style="color:var(--text-secondary)">{{ ($pendingShipments ?? collect())->count() }} طلب بانتظار الشحن</p></div>
             </div>
             @if(($pendingShipments ?? collect())->count() > 0)
             <form action="{{ route('dashboard.orders.sendAll') }}" method="POST" x-data="{ sending: false }" @submit="sending = true">
                 @csrf
-                <button type="submit" :disabled="sending" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-50" style="background:linear-gradient(135deg,#34d399,#2dd4bf)">
+                <button type="submit" :disabled="sending" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all disabled:opacity-50" style="color:var(--text-primary);background:linear-gradient(135deg,#34d399,#2dd4bf)">
                     <svg x-show="sending" class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
                     <span x-show="!sending">إرسال الكل للشحن</span>
                     <span x-show="sending">جاري الإرسال...</span>
@@ -71,65 +71,65 @@
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead><tr style="background:rgba(255,255,255,0.03)">
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">رقم الطلب</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">العميل</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الهاتف</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الولاية</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">المبلغ</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">المنتجات</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">إجراءات</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">رقم الطلب</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">العميل</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الهاتف</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الولاية</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">المبلغ</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">المنتجات</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">إجراءات</th>
                 </tr></thead>
-                <tbody class="divide-y" style="border-color:#232530">
+                <tbody class="divide-y" style="border-color:var(--border)">
                     @forelse($pendingShipments ?? [] as $order)
-                        <tr class="transition-colors hover:bg-white/[0.02]">
-                            <td class="px-5 py-3 font-mono font-bold text-white">#{{ $order->order_number }}</td>
-                            <td class="px-5 py-3 text-white">{{ $order->customer_name }}</td>
-                            <td class="px-5 py-3" style="color:#8a92a6" dir="ltr">{{ $order->customer_phone }}</td>
-                            <td class="px-5 py-3" style="color:#8a92a6">{{ $order->wilaya }}</td>
-                            <td class="px-5 py-3 font-bold text-white">{{ number_format($order->total, 0) }} DA</td>
-                            <td class="px-5 py-3" style="color:#8a92a6">{{ $order->items->sum('quantity') }}</td>
+                        <tr class="transition-colors" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background=''">
+                            <td class="px-5 py-3 font-mono font-bold" style="color:var(--text-primary)">#{{ $order->order_number }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-primary)">{{ $order->customer_name }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)" dir="ltr">{{ $order->customer_phone }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)">{{ $order->wilaya }}</td>
+                            <td class="px-5 py-3 font-bold" style="color:var(--text-primary)">{{ number_format($order->total, 0) }} DA</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)">{{ $order->items->sum('quantity') }}</td>
                             <td class="px-5 py-3">
                                 <div class="flex items-center gap-2">
                                     <a href="{{ route('dashboard.orders.show', $order->id) }}" class="transition-colors" style="color:#4f8cff" title="عرض"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></a>
                                     <form action="{{ route('dashboard.orders.updateStatus', $order->id) }}" method="POST">@csrf @method('PATCH')<input type="hidden" name="status" value="confirmed">
-                                        <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-[1.02]" style="background:linear-gradient(135deg,#34d399,#2dd4bf)"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> إرسال للشحن</button>
+                                        <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:scale-[1.02]" style="color:var(--text-primary);background:linear-gradient(135deg,#34d399,#2dd4bf)"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> إرسال للشحن</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="px-5 py-10 text-center" style="color:#555a6e"><svg class="w-12 h-12 mx-auto mb-3" style="color:#232530" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>لا توجد طلبات جديدة</td></tr>
+                        <tr><td colspan="7" class="px-5 py-10 text-center" style="color:var(--text-tertiary)"><svg class="w-12 h-12 mx-auto mb-3" style="color:var(--border)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>لا توجد طلبات جديدة</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="surface-card rounded-2xl border overflow-hidden" style="border-color:#232530">
-        <div class="px-5 py-4 border-b flex items-center gap-3" style="border-color:#232530">
+    <div class="stat-card rounded-2xl border overflow-hidden" style="border-color:var(--border)">
+        <div class="px-5 py-4 border-b flex items-center gap-3" style="border-color:var(--border)">
             <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(79,140,255,0.12)"><svg class="w-4 h-4" style="color:#4f8cff" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.139-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg></div>
-            <div><h2 class="text-sm font-bold text-white">طلبات مُرسلة — بانتظار التوصيل</h2><p class="text-xs" style="color:#8a92a6">{{ ($ordersByStatus['confirmed'] ?? collect())->count() }} طلب في الطريق</p></div>
+            <div><h2 class="text-sm font-bold" style="color:var(--text-primary)">طلبات مُرسلة — بانتظار التوصيل</h2><p class="text-xs" style="color:var(--text-secondary)">{{ ($ordersByStatus['confirmed'] ?? collect())->count() }} طلب في الطريق</p></div>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead><tr style="background:rgba(255,255,255,0.03)">
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">رقم الطلب</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">العميل</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الهاتف</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الولاية</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">المبلغ</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">شركة الشحن</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">إجراءات</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">رقم الطلب</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">العميل</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الهاتف</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الولاية</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">المبلغ</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">شركة الشحن</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">إجراءات</th>
                 </tr></thead>
-                <tbody class="divide-y" style="border-color:#232530">
+                <tbody class="divide-y" style="border-color:var(--border)">
                     @forelse($ordersByStatus['confirmed'] ?? [] as $order)
-                        <tr class="transition-colors hover:bg-white/[0.02]">
-                            <td class="px-5 py-3 font-mono font-bold text-white">#{{ $order->order_number }}</td>
-                            <td class="px-5 py-3 text-white">{{ $order->customer_name }}</td>
-                            <td class="px-5 py-3" style="color:#8a92a6" dir="ltr">{{ $order->customer_phone }}</td>
-                            <td class="px-5 py-3" style="color:#8a92a6">{{ $order->wilaya }}</td>
-                            <td class="px-5 py-3 font-bold text-white">{{ number_format($order->total, 0) }} DA</td>
+                        <tr class="transition-colors" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background=''">
+                            <td class="px-5 py-3 font-mono font-bold" style="color:var(--text-primary)">#{{ $order->order_number }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-primary)">{{ $order->customer_name }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)" dir="ltr">{{ $order->customer_phone }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)">{{ $order->wilaya }}</td>
+                            <td class="px-5 py-3 font-bold" style="color:var(--text-primary)">{{ number_format($order->total, 0) }} DA</td>
                             <td class="px-5 py-3">
-                                @if($order->shipping_company)<span class="px-2 py-0.5 rounded-md text-xs font-medium" style="background:rgba(79,140,255,0.12);color:#4f8cff">{{ $order->shipping_company }}</span>@else<span style="color:#555a6e">—</span>@endif
+                                @if($order->shipping_company)<span class="px-2 py-0.5 rounded-md text-xs font-medium" style="background:rgba(79,140,255,0.12);color:#4f8cff">{{ $order->shipping_company }}</span>@else<span style="color:var(--text-tertiary)">—</span>@endif
                             </td>
                             <td class="px-5 py-3">
                                 <div class="flex items-center gap-2">
@@ -139,39 +139,39 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="px-5 py-10 text-center" style="color:#555a6e">لا توجد طلبات في الطريق</td></tr>
+                        <tr><td colspan="7" class="px-5 py-10 text-center" style="color:var(--text-tertiary)">لا توجد طلبات في الطريق</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="surface-card rounded-2xl border overflow-hidden" style="border-color:#232530">
-        <div class="px-5 py-4 border-b flex items-center gap-3" style="border-color:#232530">
+    <div class="stat-card rounded-2xl border overflow-hidden" style="border-color:var(--border)">
+        <div class="px-5 py-4 border-b flex items-center gap-3" style="border-color:var(--border)">
             <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(167,139,250,0.12)"><svg class="w-4 h-4" style="color:#a78bfa" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.139-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg></div>
-            <div><h2 class="text-sm font-bold text-white">طلبات مشحونة</h2><p class="text-xs" style="color:#8a92a6">{{ ($ordersByStatus['shipped'] ?? collect())->count() }} طلب مشحون</p></div>
+            <div><h2 class="text-sm font-bold" style="color:var(--text-primary)">طلبات مشحونة</h2><p class="text-xs" style="color:var(--text-secondary)">{{ ($ordersByStatus['shipped'] ?? collect())->count() }} طلب مشحون</p></div>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead><tr style="background:rgba(255,255,255,0.03)">
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">رقم الطلب</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">العميل</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الولاية</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">المبلغ</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">شركة الشحن</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">إجراءات</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">رقم الطلب</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">العميل</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الولاية</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">المبلغ</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">شركة الشحن</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">إجراءات</th>
                 </tr></thead>
-                <tbody class="divide-y" style="border-color:#232530">
+                <tbody class="divide-y" style="border-color:var(--border)">
                     @forelse($ordersByStatus['shipped'] ?? [] as $order)
-                        <tr class="transition-colors hover:bg-white/[0.02]">
-                            <td class="px-5 py-3 font-mono font-bold text-white">#{{ $order->order_number }}</td>
-                            <td class="px-5 py-3 text-white">{{ $order->customer_name }}</td>
-                            <td class="px-5 py-3" style="color:#8a92a6">{{ $order->wilaya }}</td>
-                            <td class="px-5 py-3 font-bold text-white">{{ number_format($order->total, 0) }} DA</td>
-                            <td class="px-5 py-3">@if($order->shipping_company)<span class="px-2 py-0.5 rounded-md text-xs font-medium" style="background:rgba(167,139,250,0.12);color:#a78bfa">{{ $order->shipping_company }}</span>@else<span style="color:#555a6e">—</span>@endif</td>
+                        <tr class="transition-colors" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background=''">
+                            <td class="px-5 py-3 font-mono font-bold" style="color:var(--text-primary)">#{{ $order->order_number }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-primary)">{{ $order->customer_name }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)">{{ $order->wilaya }}</td>
+                            <td class="px-5 py-3 font-bold" style="color:var(--text-primary)">{{ number_format($order->total, 0) }} DA</td>
+                            <td class="px-5 py-3">@if($order->shipping_company)<span class="px-2 py-0.5 rounded-md text-xs font-medium" style="background:rgba(167,139,250,0.12);color:#a78bfa">{{ $order->shipping_company }}</span>@else<span style="color:var(--text-tertiary)">—</span>@endif</td>
                             <td class="px-5 py-3"><a href="{{ route('dashboard.orders.show', $order->id) }}" class="transition-colors" style="color:#4f8cff"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></a></td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="px-5 py-10 text-center" style="color:#555a6e">لا توجد طلبات مشحونة</td></tr>
+                        <tr><td colspan="6" class="px-5 py-10 text-center" style="color:var(--text-tertiary)">لا توجد طلبات مشحونة</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -193,7 +193,7 @@
                     </div>
                     <div><label class="block text-sm font-bold mb-1.5" style="color:#374151">أيام التوصيل المقدرة</label><input type="number" name="estimated_days" min="1" value="3" class="w-full rounded-xl px-4 py-3 text-sm font-medium"></div>
                     <div class="flex items-center gap-3 pt-2">
-                        <button type="submit" class="flex-1 py-3 rounded-xl text-sm font-extrabold text-white" style="background:linear-gradient(135deg,#4f8cff,#a78bfa)">إضافة الشركة</button>
+                        <button type="submit" class="flex-1 py-3 rounded-xl text-sm font-extrabold" style="color:var(--text-primary);background:linear-gradient(135deg,#4f8cff,#a78bfa)">إضافة الشركة</button>
                         <button type="button" @click="showCompanyModal = false" class="px-6 py-3 rounded-xl text-sm font-bold" style="background:#f1f3f8;color:#374151">إلغاء</button>
                     </div>
                 </form>

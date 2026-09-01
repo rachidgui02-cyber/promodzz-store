@@ -145,4 +145,32 @@ class SettingsController extends Controller
 
         return response()->json($result);
     }
+
+    public function addToBlacklist(Request $request)
+    {
+        $shop = $request->user()->shop;
+        $request->validate(['phone' => 'required|string']);
+
+        $fraud = new \App\Services\FraudDetectionService($shop->id);
+        $added = $fraud->addToBlacklist($request->phone);
+
+        return response()->json([
+            'success' => true,
+            'message' => $added ? 'تمت إضافة الرقم للقائمة السوداء' : 'الرقم موجود مسبقاً',
+        ]);
+    }
+
+    public function removeFromBlacklist(Request $request)
+    {
+        $shop = $request->user()->shop;
+        $request->validate(['phone' => 'required|string']);
+
+        $fraud = new \App\Services\FraudDetectionService($shop->id);
+        $removed = $fraud->removeFromBlacklist($request->phone);
+
+        return response()->json([
+            'success' => true,
+            'message' => $removed ? 'تمت إزالة الرقم من القائمة السوداء' : 'الرقم غير موجود',
+        ]);
+    }
 }

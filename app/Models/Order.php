@@ -120,6 +120,7 @@ class Order extends Model
         'last_call_at',
         'call_notes',
         'stock_decremented',
+        'customer_id',
     ];
 
     protected function casts(): array
@@ -140,6 +141,11 @@ class Order extends Model
     public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
     }
 
     public function items(): HasMany

@@ -4,35 +4,35 @@
 <div class="space-y-6" dir="rtl" x-data="{ showModal: false }">
     <div class="flex items-center justify-between">
         <h1 class="text-2xl font-extrabold text-white">الكوبونات</h1>
-        <button @click="showModal = true" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:scale-[1.02]" style="background:linear-gradient(135deg,#4f8cff,#a78bfa)">
+        <button @click="showModal = true" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-[1.02]" style="background:#111827;color:#ffffff">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             إضافة كوبون
         </button>
     </div>
-    <div class="surface-card rounded-2xl border overflow-hidden" style="border-color:#232530">
+    <div class="stat-card rounded-2xl border overflow-hidden" style="border-color:var(--border)">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead><tr style="background:rgba(255,255,255,0.03)">
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الكود</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">النوع</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">القيمة</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الحد الأدنى</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الحد الأقصى</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">مر×</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الحالة</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">إجراءات</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الكود</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">النوع</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">القيمة</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الحد الأدنى</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الحد الأقصى</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">مر×</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الحالة</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">إجراءات</th>
                 </tr></thead>
-                <tbody class="divide-y" style="border-color:#232530">
+                <tbody class="divide-y" style="border-color:var(--border)">
                     @forelse($coupons ?? [] as $coupon)
-                        <tr class="transition-colors hover:bg-white/[0.02]">
-                            <td class="px-5 py-3"><span class="font-mono font-bold px-2.5 py-1 rounded-lg text-white" style="background:rgba(255,255,255,0.06)">{{ $coupon->code }}</span></td>
+                        <tr class="transition-colors" onmouseover="this.style.background=var(--hover-bg)" onmouseout="this.style.background='transparent'">
+                            <td class="px-5 py-3"><span class="font-mono font-bold px-2.5 py-1 rounded-lg text-white" style="background:var(--input-bg)">{{ $coupon->code }}</span></td>
                             <td class="px-5 py-3">
                                 @if($coupon->type === 'fixed')<span class="px-2.5 py-1 rounded-full text-xs font-medium" style="background:rgba(79,140,255,0.12);color:#4f8cff">مبلغ ثابت</span>@else<span class="px-2.5 py-1 rounded-full text-xs font-medium" style="background:rgba(167,139,250,0.12);color:#a78bfa">نسبة مئوية</span>@endif
                             </td>
                             <td class="px-5 py-3 font-bold text-white">@if($coupon->type === 'fixed'){{ number_format($coupon->value, 2) }} DA@else{{ $coupon->value }}%@endif</td>
-                            <td class="px-5 py-3" style="color:#8a92a6">{{ number_format($coupon->min_order_amount ?? 0, 2) }} DA</td>
-                            <td class="px-5 py-3" style="color:#8a92a6">{{ $coupon->usage_limit ?? '∞' }}</td>
-                            <td class="px-5 py-3" style="color:#8a92a6">{{ $coupon->used_count ?? 0 }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)">{{ number_format($coupon->min_order_amount ?? 0, 2) }} DA</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)">{{ $coupon->usage_limit ?? '∞' }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)">{{ $coupon->used_count ?? 0 }}</td>
                             <td class="px-5 py-3">
                                 @if($coupon->is_active)<span class="px-2.5 py-1 rounded-full text-xs font-medium" style="background:rgba(52,211,153,0.12);color:#34d399">نشط</span>@else<span class="px-2.5 py-1 rounded-full text-xs font-medium" style="background:rgba(107,114,128,0.12);color:#6b7280">غير نشط</span>@endif
                             </td>
@@ -50,7 +50,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="8" class="px-5 py-10 text-center" style="color:#555a6e">لا توجد كوبونات بعد</td></tr>
+                        <tr><td colspan="8" class="px-5 py-10 text-center" style="color:var(--text-tertiary)">لا توجد كوبونات بعد</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -76,7 +76,7 @@
                     </div>
                     <div><label class="block text-sm font-bold mb-1.5" style="color:#374151">تاريخ الانتهاء</label><input type="datetime-local" name="expires_at" class="w-full rounded-xl px-4 py-3 text-sm font-medium"></div>
                     <div class="flex items-center gap-3 pt-2">
-                        <button type="submit" class="flex-1 py-3 rounded-xl text-sm font-extrabold text-white" style="background:linear-gradient(135deg,#4f8cff,#a78bfa)">إضافة الكوبون</button>
+                        <button type="submit" class="flex-1 py-3 rounded-xl text-sm font-extrabold text-white" style="background:#111827;color:#ffffff">إضافة الكوبون</button>
                         <button type="button" @click="showModal = false" class="px-6 py-3 rounded-xl text-sm font-bold" style="background:#f1f3f8;color:#374151">إلغاء</button>
                     </div>
                 </form>

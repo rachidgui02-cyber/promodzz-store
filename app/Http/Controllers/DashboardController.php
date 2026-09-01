@@ -81,12 +81,18 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
+        // Visitor stats
+        $visitorStats = \App\Services\VisitorService::getTodayStats($shop);
+        $weeklyVisitors = \App\Services\VisitorService::getWeeklyStats($shop);
+
         return view('dashboard.index', compact(
             'shop',
             'stats',
             'recentOrders',
             'lowStockProducts',
-            'dhdConfig'
+            'dhdConfig',
+            'visitorStats',
+            'weeklyVisitors'
         ));
     }
 }

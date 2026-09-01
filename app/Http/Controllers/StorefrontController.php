@@ -47,6 +47,9 @@ class StorefrontController extends Controller
 
         $products = $query->latest()->paginate(20)->withQueryString();
 
+        // Track visitor
+        \App\Services\VisitorService::track($shop, request()->fullUrl(), request()->header('referer'));
+
         return view('storefront.show', compact('shop', 'products'));
     }
 
@@ -67,6 +70,9 @@ class StorefrontController extends Controller
             ->get();
 
         $shippingCost = $shop->default_shipping_cost ?? 600;
+
+        // Track visitor
+        \App\Services\VisitorService::track($shop, request()->fullUrl(), request()->header('referer'));
 
         return view('storefront.product', compact('product', 'shop', 'relatedProducts', 'shippingCost'));
     }
@@ -102,11 +108,25 @@ class StorefrontController extends Controller
         $shipping = \App\Models\WilayaShippingRate::getCostForWilaya($shop->id, $validated['wilaya'], $validated['delivery_type']);
         $total = $subtotal + $shipping;
 
+        // ═══ Fraud Detection ═══
+        $fraudService = new \App\Services\FraudDetectionService($shop->id);
+        $fraudCheck = $fraudService->checkOrder([
+            'customer_name' => $validated['customer_name'],
+            'customer_phone' => $validated['customer_phone'],
+            'total' => $total,
+        ]);
+
         $address = $validated['delivery_type'] === 'stop_desk'
             ? 'مكتب التوصيل: ' . ($validated['stop_desk_commune'] ?? $validated['commune']) . ' - ' . $validated['wilaya']
             : $validated['wilaya'] . ' - ' . $validated['commune'];
 
         $orderNumber = Order::generateOrderNumber();
+
+        // Auto-mark as cancelled if high risk (score >= 50)
+        $initialStatus = $fraudCheck['should_block'] ? 'cancelled' : 'new';
+        $fraudNote = $fraudCheck['is_suspicious']
+            ? ' [FRAUD] Score: ' . $fraudCheck['score'] . ' | ' . implode(', ', $fraudCheck['reasons'])
+            : '';
 
         $order = Order::create([
             'shop_id' => $shop->id,
@@ -116,11 +136,11 @@ class StorefrontController extends Controller
             'customer_address' => $address,
             'wilaya' => $validated['wilaya'],
             'commune' => $validated['commune'],
-            'notes' => 'نوع التوصيل: ' . ($validated['delivery_type'] === 'stop_desk' ? 'المكتب - ' . ($validated['stop_desk_commune'] ?? '') : 'المنزل'),
+            'notes' => 'نوع التوصيل: ' . ($validated['delivery_type'] === 'stop_desk' ? 'المكتب - ' . ($validated['stop_desk_commune'] ?? '') : 'المنزل') . $fraudNote,
             'subtotal' => $subtotal,
             'shipping_cost' => $shipping,
             'total' => $total,
-            'status' => 'new',
+            'status' => $initialStatus,
             'payment_method' => 'cod',
             'payment_status' => 'pending',
         ]);
@@ -138,6 +158,18 @@ class StorefrontController extends Controller
             $tg = new \App\Services\TelegramNotificationService($shop->id);
             $tg->sendNewOrderNotification($order);
         }
+
+        $customer = \App\Models\Customer::updateOrCreate(
+            ['shop_id' => $shop->id, 'phone' => $validated['customer_phone']],
+            [
+                'name' => $validated['customer_name'],
+                'wilaya' => $validated['wilaya'],
+                'commune' => $validated['commune'],
+                'address' => $validated['address'] ?? null,
+            ]
+        );
+        $customer->recordOrder($total);
+        $order->update(['customer_id' => $customer->id]);
 
         return redirect()->route('storefront.success', [$slug, $order->id]);
     }

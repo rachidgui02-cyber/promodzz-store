@@ -77,6 +77,11 @@ class Shop extends Model
         return $this->hasMany(Setting::class);
     }
 
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class);
+    }
+
     public function shippingCompanies(): HasMany
     {
         return $this->hasMany(ShippingCompany::class);

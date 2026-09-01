@@ -99,11 +99,17 @@ class StatsController extends Controller
             ->get()
             ->pluck('count', 'status');
 
+        $todayNewOrders = $shop->orders()
+            ->whereDate('created_at', today())
+            ->where('status', 'new')
+            ->count();
+
         return response()->json([
             'orders_by_date' => $ordersByDate,
             'revenue_chart' => $revenueChart,
             'top_products' => $topProducts,
             'status_breakdown' => $statusBreakdown,
+            'today_new_orders' => $todayNewOrders,
         ]);
     }
 }

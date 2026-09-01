@@ -4,22 +4,22 @@
 <div class="space-y-6" dir="rtl" x-data="{ showModal: false, timeline: [], loading: false, searchQuery: '{{ request('search') }}' }">
     <div class="flex items-center justify-between flex-wrap gap-3">
         <div class="flex items-center gap-3">
-            <a href="{{ route('dashboard.warehouse.index') }}" class="p-2 rounded-lg transition-colors" style="color:var(--text-secondary)" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"/></svg></a>
+            <a href="{{ route('dashboard.warehouse.index') }}" class="p-2 rounded-lg transition-colors" style="color:var(--text-secondary)" onmouseover="this.style.background=var(--hover-bg)" onmouseout="this.style.background='transparent'"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"/></svg></a>
             <h1 class="text-2xl font-extrabold" style="color:var(--text-primary)">طلبيات المخزون</h1>
         </div>
         <div class="flex items-center gap-2">
             @foreach(['all'=>'الكل','today'=>'اليوم','7days'=>'7 أيام','30days'=>'30 يوم'] as $key => $label)
-                <a href="?period={{ $key }}&search={{ request('search') }}" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all" style="{{ request('period','all') === $key ? 'background:linear-gradient(135deg,#4f8cff,#a78bfa);color:var(--text-primary)' : 'background:rgba(255,255,255,0.04);color:#8a92a6' }}">{{ $label }}</a>
+                <a href="?period={{ $key }}&search={{ request('search') }}" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all" style="{{ request('period','all') === $key ? 'background:#111827;color:#ffffff' : 'background:var(--input-bg);color:var(--text-secondary)' }}">{{ $label }}</a>
             @endforeach
             <form method="GET" class="flex items-center gap-2" x-data>
-                <input type="text" name="search" x-model="searchQuery" placeholder="بحث بالاسم، الهاتف، الرقم..." class="px-3 py-2 rounded-xl text-sm font-medium" style="background:rgba(255,255,255,0.05);color:white;border:1px solid #232530" @keyup.enter="$el.form.submit()">
+                <input type="text" name="search" x-model="searchQuery" placeholder="بحث بالاسم، الهاتف، الرقم..." class="px-3 py-2 rounded-xl text-sm font-medium" style="background:var(--input-bg);color:var(--text-primary);border:1px solid var(--border)" @keyup.enter="$el.form.submit()">
                 <button type="submit" class="p-2 rounded-xl" style="background:rgba(79,140,255,0.12);color:#4f8cff"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></button>
             </form>
         </div>
     </div>
 
     {{-- Orders Table --}}
-    <div class="surface-card rounded-2xl border overflow-hidden" style="border-color:var(--border)">
+    <div class="stat-card rounded-2xl border overflow-hidden" style="border-color:var(--border)">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead><tr style="background:var(--table-header-bg)">
@@ -34,7 +34,7 @@
                 </tr></thead>
                 <tbody class="divide-y" style="border-color:var(--border)">
                     @forelse($orders as $order)
-                        <tr class="transition-colors hover:bg-white/[0.02]">
+                        <tr class="transition-colors" onmouseover="this.style.background=var(--hover-bg)" onmouseout="this.style.background='transparent'">
                             <td class="px-5 py-3"><span class="font-bold" style="color:#4f8cff">{{ $order->order_number }}</span></td>
                             <td class="px-5 py-3 text-sm font-medium" style="color:var(--text-primary)">{{ $order->customer_name }}</td>
                             <td class="px-5 py-3 text-sm" style="color:var(--text-secondary)" dir="ltr">{{ $order->customer_phone }}</td>

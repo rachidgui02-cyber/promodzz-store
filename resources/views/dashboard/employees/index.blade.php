@@ -4,44 +4,44 @@
 <div class="space-y-6" dir="rtl" x-data="{ showModal: false }">
     <div class="flex items-center justify-between">
         <h1 class="text-2xl font-extrabold text-white">العمال</h1>
-        <button @click="showModal = true" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:scale-[1.02]" style="background:linear-gradient(135deg,#4f8cff,#a78bfa)">
+        <button @click="showModal = true" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-[1.02]" style="background:#111827;color:#ffffff">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             إضافة عامل
         </button>
     </div>
-    <div class="surface-card rounded-2xl border overflow-hidden" style="border-color:#232530">
+    <div class="stat-card rounded-2xl border overflow-hidden" style="border-color:var(--border)">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead><tr style="background:rgba(255,255,255,0.03)">
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الاسم</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">البريد الإلكتروني</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الهاتف</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الدور</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">الحالة</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">آخر دخول</th>
-                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:#8a92a6">إجراءات</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الاسم</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">البريد الإلكتروني</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الهاتف</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الدور</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">الحالة</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">آخر دخول</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs" style="color:var(--text-secondary)">إجراءات</th>
                 </tr></thead>
-                <tbody class="divide-y" style="border-color:#232530">
+                <tbody class="divide-y" style="border-color:var(--border)">
                     @forelse($employees ?? [] as $employee)
                         @php
                             $roleLabels = ['manager' => 'مدير', 'operator' => 'مشغل', 'viewer' => 'مشاهد'];
                             $roleColors = ['manager' => '#a78bfa', 'operator' => '#4f8cff', 'viewer' => '#6b7280'];
                             $rc = $roleColors[$employee->role] ?? '#6b7280';
                         @endphp
-                        <tr class="transition-colors hover:bg-white/[0.02]">
+                        <tr class="transition-colors" onmouseover="this.style.background=var(--hover-bg)" onmouseout="this.style.background='transparent'">
                             <td class="px-5 py-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background:linear-gradient(135deg,#4f8cff,#a78bfa)">{{ mb_substr($employee->name, 0, 1) }}</div>
                                     <span class="font-medium text-white">{{ $employee->name }}</span>
                                 </div>
                             </td>
-                            <td class="px-5 py-3" style="color:#8a92a6" dir="ltr">{{ $employee->email }}</td>
-                            <td class="px-5 py-3" style="color:#8a92a6" dir="ltr">{{ $employee->phone ?? '-' }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)" dir="ltr">{{ $employee->email }}</td>
+                            <td class="px-5 py-3" style="color:var(--text-secondary)" dir="ltr">{{ $employee->phone ?? '-' }}</td>
                             <td class="px-5 py-3"><span class="px-2.5 py-1 rounded-full text-xs font-medium" style="background:{{ $rc }}20;color:{{ $rc }}">{{ $roleLabels[$employee->role] ?? $employee->role }}</span></td>
                             <td class="px-5 py-3">
                                 @if($employee->is_active)<span class="px-2.5 py-1 rounded-full text-xs font-medium" style="background:rgba(52,211,153,0.12);color:#34d399">نشط</span>@else<span class="px-2.5 py-1 rounded-full text-xs font-medium" style="background:rgba(107,114,128,0.12);color:#6b7280">غير نشط</span>@endif
                             </td>
-                            <td class="px-5 py-3 text-xs" style="color:#8a92a6">{{ $employee->last_login_at ? $employee->last_login_at->diffForHumans() : 'لم يسجل دخول بعد' }}</td>
+                            <td class="px-5 py-3 text-xs" style="color:var(--text-secondary)">{{ $employee->last_login_at ? $employee->last_login_at->diffForHumans() : 'لم يسجل دخول بعد' }}</td>
                             <td class="px-5 py-3">
                                 <div class="flex items-center gap-2">
                                     <form action="{{ route('dashboard.employees.toggle', $employee->id) }}" method="POST">@csrf @method('PATCH')
@@ -56,7 +56,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="px-5 py-10 text-center" style="color:#555a6e">لا يوجد عمال بعد</td></tr>
+                        <tr><td colspan="7" class="px-5 py-10 text-center" style="color:var(--text-tertiary)">لا يوجد عمال بعد</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -77,7 +77,7 @@
                     <div><label class="block text-sm font-bold mb-1.5" style="color:#374151">كلمة المرور *</label><input type="password" name="password" required class="w-full rounded-xl px-4 py-3 text-sm font-medium" placeholder="••••••••">@error('password')<span class="text-sm mt-1 block" style="color:#f87171">{{ $message }}</span>@enderror</div>
                     <div><label class="block text-sm font-bold mb-1.5" style="color:#374151">الدور *</label><select name="role" required class="w-full rounded-xl px-4 py-3 text-sm font-medium"><option value="viewer">مشاهد</option><option value="operator">مشغل</option><option value="manager">مدير</option></select></div>
                     <div class="flex items-center gap-3 pt-2">
-                        <button type="submit" class="flex-1 py-3 rounded-xl text-sm font-extrabold text-white" style="background:linear-gradient(135deg,#4f8cff,#a78bfa)">إضافة العامل</button>
+                        <button type="submit" class="flex-1 py-3 rounded-xl text-sm font-extrabold text-white" style="background:#111827;color:#ffffff">إضافة العامل</button>
                         <button type="button" @click="showModal = false" class="px-6 py-3 rounded-xl text-sm font-bold" style="background:#f1f3f8;color:#374151">إلغاء</button>
                     </div>
                 </form>
