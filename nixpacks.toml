@@ -1,3 +1,4 @@
+# Disable Node.js - project uses Tailwind CDN, no build needed
 [phases]
 setup = []
 
@@ -5,9 +6,6 @@ setup = []
 cmds = ["composer install --ignore-platform-reqs --no-dev --optimize-autoloader"]
 
 [phases.build]
-cmds = []
-
-[phases.collect]
 cmds = []
 
 [start]
